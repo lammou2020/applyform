@@ -1,0 +1,24 @@
+<h5 onclick="document.getElementById('filesname_form').style.display = 'block';" > 檔案:</h5>
+
+  {% for file in filenames %}
+  <div>
+    <a href="/{{file_link_base}}/{{file.f}}">
+      <span>{{file.n}}</span>
+    </a>
+  </div>
+  {% else %}
+  <p>No files found</p>
+  {% endfor %}
+  <div id=filesname_form style="display:none;">
+  <form method="post" action="{{file_uplink}}" enctype="multipart/form-data">
+    <dl>
+    <p>
+      <input type="file" name="files[]" multiple="true" autocomplete="off" required>
+    </p>
+    </dl>
+    <p>
+    <input type="submit" value="提交">
+    <span>MAX_CONTENT_LENGTH = 8 * 1024 * 1024</span>
+  </p>
+  </form>
+</div>

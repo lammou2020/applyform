@@ -1,0 +1,42 @@
+{#
+# Copyright 2020 Inc.
+#}
+
+{% extends "esasset/base.html" %}
+
+{% block content %}
+<style>
+  td {padding-right: 5px;padding-left: 5px;}
+</style>
+{% if session.profile and session.profile.Role == "1" %}
+{% endif %}
+<div>開放日，分為5個時段開放參觀。</div>
+{% for book in ["1","2","3","4","5"] %}
+<div class="media">
+  <a href="/applyform/{{book}}">
+    <div class="media-left">
+      {% if book.imageUrl %}
+        <img style="max-width:100px" src="{{book.imageUrl}}">
+      {% else %}
+      <img style="max-width:100px;width:100px" src="/static/images/report1.png">
+      {% endif %}
+    </div>
+    <div class="media-body">
+      <h4>時段 {{book | safe}}</h4>
+      <p>   x /210 </p>
+    </div>
+  </a>
+</div>
+{% else %}
+<p>No found</p>
+{% endfor %}
+
+{% if next_page_token %}
+<nav>
+  <ul class="pager">
+    <li><a href="?page_token={{next_page_token}}">More</a></li>
+  </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

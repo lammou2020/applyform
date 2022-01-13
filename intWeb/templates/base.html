@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>apply form</title>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel='stylesheet', href='/static/stylesheets/bootstrap.min.css'/>
+    <link rel='stylesheet', href='/static/stylesheets/bootstrap-theme.min.css'/>
+    <link rel='stylesheet' href='/static/jquery-ui-dist/jquery-ui.min.css'  />
+    <script src='/static/javascripts/jquery.min.js' ></script>
+    <script src='/static/javascripts/bootstrap.js'></script>
+    <script src='/static/jquery-ui-dist/jquery-ui.min.js'></script>
+    
+  </head>
+  <body>
+    <div class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <div class="navbar-brand">管理平台</div>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="/EsAsset"><span class="glyphicon">&#xe021</span></a></li-->
+          <li><a href="/EsAsset">資產管理</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+              <span class="glyphicon glyphicon-paperclip"></span><span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu"><a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              <li><a href="/auth/register" >用戶登記</a></li>
+              <li><a href="/EsAsset" >資產信息</a></li>
+              <li><a href="/lessons" >課程信息</a></li>
+              <li><a href="/hello" >記事本</a></li>
+              <li><a href="/blog" >慱客</a></li>
+            </ul>
+          </li>
+        </ul>
+        {# [START profile] #}
+        <p class="navbar-text navbar-right">
+        {% if session.profile %}
+          <a href="/logout">
+            {% if session.profile.image %}
+              <img class="img-circle" src="{{session.profile.image.url}}" width="24">
+            {% endif %}
+            <!-- {{session.profile.user}}  -->
+          </a>
+        {% else %}
+          <!--a href="/login">Sign in</a-->
+        {% endif %}
+        </p>
+        {# [END profile] #}
+      </div>
+    </div>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+    {{user}}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </body>
+
+</html>

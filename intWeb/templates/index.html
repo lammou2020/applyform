@@ -1,0 +1,68 @@
+{#
+# Copyright 2020 Inc.
+#}
+{% extends "base.html" %}
+{% block content %}
+<script>
+  $(function () {
+    $("#accordion").accordion();
+  });
+</script>
+<div class="row">
+  <div class="col-lg-2">
+    <div id="accordion">
+      <h3>資產管理</h3>
+      <div style="margin:0;padding:0;">
+        <h4 style="margin:0;padding-left:0;"><a href="/EsAsset"><img src="/static/images/markicon/edit.png" />資產管理</a>
+        </h4>
+        <h4>.</h4>
+      </div>
+      <h3>用戶管理</h3>
+      <div style="margin:0;padding:0;">
+        <h4 style="margin:0;padding-left:0;"><a href="/auth/register"><img
+              src="/static/images/markicon/edit.png" />用戶登記</a></h4>
+        <h4>.</h4>
+      </div>
+      <h3>報表</h3>
+      <div style="margin:0;padding:0;">
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    {% if session.profile and session.profile.Role == "1" %}
+
+    {% endif %}
+    {% for book in books %}
+    <div class="media">
+      <a href="/EsAsset/{{book.id}}">
+        <div class="media-left">
+          {% if book.imageUrl %}
+          <img style="max-width:100px;width:100px" src="{{book.imageUrl}}">
+          {% else %}
+          <img style="max-width:100px;width:100px" src="/images/report1.png">
+          {% endif %}
+        </div>
+        <div class="media-body">
+          <h4>{{book.Title}}</h4>
+          <p>{{book.Classno}}</p>
+        </div>
+      </a>
+    </div>
+    {% else %}
+    <p>No info found</p>
+    {% endfor %}
+
+    {% if next_page_token %}
+    <nav>
+      <ul class="pager">
+        <li><a href="?page_token={{next_page_token}}">More</a></li>
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+</div>
+<footer>
+  <p class="float-right"><a href="#">Back to top</a></p>
+  <small>Copyright&nbsp;&#169; 1999 Macau Baptist College.All Rights Reserved</small>
+</footer>
+{% endblock %}

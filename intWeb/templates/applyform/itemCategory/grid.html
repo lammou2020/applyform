@@ -1,0 +1,101 @@
+{#
+    # Copyright 2015 Inc.
+    #}
+    
+    {% extends "esasset/base.html" %}
+    
+    {% block content %}
+    <script src='/static/javascripts/cool/grid_v2.js?v=2' ></script>
+    <script src='/static/javascripts/cool/table2csv.js' ></script>
+    <link rel='stylesheet' href='/static/javascripts/cool/grid.css'  />
+    <style>
+      td {padding-right: 5px; padding-left: 5px; }
+      th {min-width: 100px;}
+    </style>
+    <script>
+    function AddBlankRows(){
+      let _url="/EsAsset/itemCateGrid_/addbatch/0?" 
+      let number_for_rows = prompt("Please enter number for rows", "0");
+      var reg = /^\d+$/;
+      if (number_for_rows != null && reg.test(number_for_rows)) {
+        window.location.href=_url.replace("/0?",`/${number_for_rows}?`);
+      } 
+    }
+    </script>
+    {% if session.profile and session.profile.Role < "8" %} <div class="btn-group">
+      <a href="#" class="btn btn-primary btn-sm" id="" onclick="AddBlankRows()">
+        <i class="glyphicon glyphicon-edit"></i>
+        新增記錄
+       </a>
+
+      <a href="#" class="btn btn-primary btn-sm" id="exportCSV">
+        <i class="glyphicon glyphicon-edit"></i>
+        下戴CSV
+       </a>
+       <a href="#" class="btn btn-primary btn-sm" id="editbtn">
+        <i class="glyphicon glyphicon-edit"></i>
+        編輯
+       </a>     
+       <a href="#" class="btn btn-primary btn-sm"id="readmodebtn">
+        <i class="glyphicon glyphicon-edit"></i>
+        唯讀
+       </a>
+       <a href="#" class="btn btn-success btn-sm" id="savebtn">
+        <i class="glyphicon glyphicon-edit"></i>
+        儲存
+       </a>
+  
+      </div>
+    {% endif %}
+    <table id=EDUTBL  class="table">
+        <tr>
+          <td class="small">id</td>
+          <td id="MA_H">pri</td>
+          <td id="MD_H">sec</td>
+          <td id="MC_H">類別名稱</td>
+          <td id="MB_H" style="min-width:60px;">年期</td>
+          <td id="ME_H">note1</td>
+          <td id="MF_H">note2</td>
+          <td id="MG_H">describ</td>
+        </tr>
+        
+      {% for item_ in items %}
+        <tr>
+          <td class="small">{{item_.id}}</td>
+          <td class="M" id="MA_itemcat-pri_{{item_.id}}">{{item_.itemcat_pri}}</td>
+          <td class="M" id="MD_itemcat-sec_{{item_.id}}">{{'%03d' | format(item_.itemcat_sec|int)}}</td>          
+          <td class="M" id="MC_name_{{item_.id}}">{{item_.name}}</td>
+          <td class="M" id="MB_depr-year_{{item_.id}}">{{item_.depr_year}}</td>
+          <td class="M" id="ME_note1_{{item_.id}}">{{item_.note1}}</td>
+          <td class="M" id="MF_note2_{{item_.id}}">{{item_.note2}}</td>
+          <td class="M" id="MG_describ_{{item_.id}}">{{item_.describ}}</td>
+        </tr>
+      {% else %}
+      <tr><td>No item found</td></tr>
+      {% endfor %}
+    </table>
+    
+
+    
+    
+    <script>
+      $("#exportCSV").on('click', function(event) {
+        var args = [$('#EDUTBL'), 'export_itemCat.csv'];
+        exportTableToCSV.apply(this, args);
+      });
+  
+      //var PostUrl='itemCateGrid_/api/JSON/update' ;    
+      var PostUrl='itemCateGrid_/api/JSON/updateSet' ;    
+      $(document).ready(function(){
+          BindingFunctions("editbtn","savebtn",'readmodebtn');
+          BindingHead_EditMode(['MA_H','MB_H','MC_H','MD_H','ME_H','MF_H','MG_H']);
+          BindingFieldDefsIntegerFields({'MA':'INT','MB':'INT','MD':'INT'});
+          GenOriginalData();
+      });  
+     //'%03d' | format(item_.itemcat_sec|int)
+      </script>
+  
+    
+    
+    
+    {% endblock %}

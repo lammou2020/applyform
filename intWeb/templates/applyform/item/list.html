@@ -1,0 +1,82 @@
+{#
+# Copyright 2020 Inc.
+#}
+
+{% extends "esasset/base.html" %}
+
+{% block content %}
+<style>
+  td {padding-right: 5px;padding-left: 5px;}
+</style>
+{% if session.profile and session.profile.Role == "1" %}
+<h4>產品列表</h4>
+<a href="/EsAsset/add" class="btn btn-success btn-sm">
+  <i class="glyphicon glyphicon-plus"></i>
+  Add 專案
+</a>
+<small>按單據或專案項目劃分</small>
+{% endif %}
+{% for book in books %}
+<div class="media">
+  
+    <div class="media-left">
+      {% if book.imageUrl %}
+        <img style="max-width:200px" src="{{book.imageUrl}}">
+      {% else %}
+      {% endif %}
+    </div>
+    <div class="media-body">
+      <table class="table">
+        <tr>
+          <td>id,項目代號</td>
+          <td>名稱</td>
+          <td>型號</td>
+          <td>SN/PN</td>
+          <td>登記日期</td>
+          <td>存放位置</td>
+          <td>createdById</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/EsAsset/{{book.acc_acno}}/item/{{book.id}}">{{book.id}}.{{book.itemno}}</a>
+          </td>
+          <td>
+            <h4>{{book.name}}</h4>
+          </td>
+          <td>
+            {{book.model}}
+          </td>
+          <td>
+            {{book.sn}}
+          </td>
+          <td>
+            {{book.regSDate}}
+          </td>
+          <td>
+            {% set list1 = book.note1.split(';') %}
+            {% for item in list1 %}
+            {% if (item|string).startswith(roomid|string) %}
+               <p>{{ item }}</p>
+                {% endif %}
+            {% endfor %} 
+          </td>
+
+          <td>
+            {{book.createdById}}
+          </td>
+      </table>
+      <p>{{book.describ | safe}}</p>
+    </div>
+</div>
+{% else %}
+<p>No lessons found</p>
+{% endfor %}
+
+{% if next_page_token %}
+<nav>
+  <ul class="pager">
+    <li><a href="?page_token={{next_page_token}}">More</a></li>
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}

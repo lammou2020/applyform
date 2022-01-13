@@ -1,0 +1,57 @@
+{#
+# Copyright 2015 Inc.
+#}
+
+{% extends "esasset/base.html" %}
+
+{% block content %}
+<style>
+  td {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+</style>
+
+<h4>{{book.Lesson}} {{book.Title}}</h4>
+<a href="/EsAsset/{{acc_id}}" class="btn btn-primary btn-sm">
+  <i class="glyphicon glyphicon-edit"></i>
+  返回專案
+</a>
+{% if session.profile and session.profile.Role < "8" %} <div class="btn-group">
+
+  <a href="/EsAsset/{{acc_id}}/item/{{book.id}}/edit" class="btn btn-primary btn-sm">
+    <i class="glyphicon glyphicon-edit"></i>
+    Edit 項目
+  </a>
+  <a href="/EsAsset/{{acc_id}}/item/{{book.id}}/delete" class="btn btn-danger btn-sm">
+    <i class="glyphicon glyphicon-trash"></i>
+    Delete 項目
+  </a>
+  </div>
+  {% endif %}
+  <div class="media">
+    <div class="media-left">
+      {% if book.imageUrl %}
+      <img class="book-image" src="{{book.imageUrl}}">
+      {% else %}
+      {% endif %}
+    </div>
+  </div>
+  {% set items=[book] %}
+  {% include 'esasset/control/itemtable.html' %}
+  <div class="media-body">
+     
+<br>
+<br>
+<br>
+{% if (book.itemno|string).startswith("4271") %}
+     
+{% endif %}
+  <p>{{book.note2 | safe}}</p>
+  </div>
+{% set file_link_base="/EsAsset/%s/item/%s/download"%(acc_id,book.id) %}
+{% set file_uplink="/EsAsset/%s/item/%s/upload"%(acc_id,book.id) %}
+{% include 'esasset/control/filenames_form.html' %}
+
+
+{% endblock %}

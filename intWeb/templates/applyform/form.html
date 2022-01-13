@@ -1,0 +1,63 @@
+{#
+# Copyright 2020  Inc.
+#
+#}
+
+{% extends "applyform/base.html" %}
+
+{% block content %}
+<h3>開放日參觀預約申請表</h3>
+<script src="https://cdn.ckeditor.com/4.15.1/standard/ckeditor.js"></script>
+<form method="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="apply_name">申請人:</label>
+    <input type="text" name="apply_name" id="apply_name" value="{{book.apply_name}}"  class="form-control"/>
+  </div>
+  <div class="form-group">
+    <label for="attendance">人數:</label>
+  <select class="form-control">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+  </select>
+  </div>
+  <div class="form-group">
+    <label for="name1">出席子女姓名:</label>
+    <input type="text" name="name1" id="name1" value="{{book.name1}}" class="form-control"/>
+  </div>
+  <div class="form-group">
+    <label for="name2">出席人姓名:</label>
+    <input type="text" name="name2" id="name2" value="{{book.name2}}" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label for="tel">聯絡電話:</label>
+    <input type="text" name="tel" id="tel" value="{{book.tel}}" class="form-control"/>
+  </div>
+  <div class="form-group">
+    <label for="time_period">出席時段:</label>
+    <input type="text" name="time_period" id="time_period" value="{{book.time_period}}"  readonly="true" class="form-control"/>
+  </div>
+  <div class="form-group">
+    <label for="captcha">captcha:</label>
+    <table>
+      <tr>
+      <td><input type="text" name="captcha" id="captcha" value=""   class="form-control"/></td>
+      <td><img src=captcha></td>
+      </tr>
+    </table>
+  </div>
+  <div class="form-group hidden">
+    <label for="regSDate">日期:</label>
+    <input type="text" name="regSDate" id="regSDate" value="{{book.regSDate}}"  readonly="true" class="form-control"/>
+  </div>
+  
+  <div class="form-group hidden">
+    <label for="createdById">Created by ID</label>
+    <input type="text" name="createdById" id="createdById" value="{{book.createdById}}" class="form-control"/>
+  </div>
+  <div id="describ" style="color:read">{{describ}}</div>
+  <button type="submit" class="btn btn-success">提交</button>
+</form>
+
+{% endblock %}

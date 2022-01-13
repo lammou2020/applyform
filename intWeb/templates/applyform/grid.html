@@ -1,0 +1,118 @@
+{#
+  # Copyright 2015 Inc.
+  #}
+  
+  {% extends "esasset/base.html" %}
+  
+  {% block content %}
+  <style>
+    .container {padding:0px;margin:0;width: 100%;}
+    textarea{
+      min-width:60px;
+      min-height: 40px;
+      overflow-y:visible;
+      padding:0;margin:0;outline: none;overflow: auto;}
+    
+    td{padding:10px;margin:0}
+  </style>
+  <script src='/static/javascripts/cool/grid_v2.js?v=2' ></script>
+  <script src='/static/javascripts/cool/table2csv.js' ></script>
+  <link rel='stylesheet' href='/static/javascripts/cool/grid.css'  />
+  <style>
+    td {padding-right: 5px; padding-left: 5px; }
+    th{min-width: 100px;}
+  </style>
+  <h4>{{book.Lesson}} {{book.Title}}</h4>
+  {% if session.profile and session.profile.Role < "8" %} <div class="btn-group">
+    <a href="/EsAsset/{{book.id}}" class="btn btn-primary btn-sm">
+      <i class="glyphicon glyphicon-edit"></i>
+      返回 專案
+    </a>
+    <a href="#" class="btn btn-primary btn-sm" id="exportCSV">
+      <i class="glyphicon glyphicon-edit"></i>
+      下戴CSV
+     </a>
+     <a href="#" class="btn btn-primary btn-sm" id="editbtn">
+      <i class="glyphicon glyphicon-edit"></i>
+      編輯
+     </a>     
+     <a href="#" class="btn btn-primary btn-sm"id="readmodebtn">
+      <i class="glyphicon glyphicon-edit"></i>
+      唯讀
+     </a>
+     <a href="#" class="btn btn-success btn-sm" id="savebtn">
+      <i class="glyphicon glyphicon-edit"></i>
+      儲存
+     </a>
+     <a href="#" class="btn btn-primary btn-sm" onclick="calcTotalbtn();">
+      <i class="glyphicon glyphicon-edit"></i>
+      淨值運算
+    </a>
+    <a href="#" class="btn btn-success btn-sm" onclick="status_place_chg();">
+      <i class="glyphicon glyphicon-edit"></i>
+      位置異動日誌儲存
+    </a>   
+
+    </div>
+    {% endif %}
+    <div class="media">
+      <div class="media-left">
+        {% if book.imageUrl %}
+        <img class="book-image" src="{{book.imageUrl}}">
+        {% else %}
+        {% endif %}
+      </div>
+  
+    </div>
+    <div class="media-body">
+      <table>
+        <tr>
+          <td>id,項目代號</td>
+          <td>專案項目名稱</td>
+          <td>登記日期</td>
+          <td>createdById</td>
+        </tr>
+        <tr>
+          <td>
+            <a href="/EsAsset/{{book.id}}">{{book.id}}.{{book.acno}}</a>
+          </td>
+          <td><h4>{{book.acc}}</h4>
+          </td>
+          <td>
+            {{book.regSDate}}
+          </td>
+          <td>
+            {{book.createdById}}
+          </td>
+      </table>
+      <p>{{book.describ | safe}}</p>
+    </div>
+    {% if session.profile and session.profile.Role < "8" %} <div class="btn-group">
+    {% endif %}
+  <h3>明細</h3>
+  
+  {% set acc_id=book.id %}
+  {% include 'esasset/control/itemtable.html' %}
+  
+  <script>
+    $("#exportCSV").on('click', function(event) {
+      var args = [$('#EDUTBL'), 'export_{{book.acc}}_items.csv'];
+      exportTableToCSV.apply(this, args);
+    });
+
+    //var PostUrl='item/api/JSON/update' ;    
+    var PostUrl='item/api/JSON/updateSet' ;    
+    $(document).ready(function(){
+    	BindingFunctions("editbtn","savebtn",'readmodebtn');
+    	BindingHead_EditMode(['MA_H','MB_H','MC_H','MD_H','ME_H','MF_H','MG_H','MH_H','MI_H',,'MJ_H',
+      'MK_H','ML_H','MM_H','MN_H','MO_H']);
+    	BindingFieldDefsIntegerFields({'MB':'INT','MF':'INT','MG':'INT','MH':'INT','MI':'INT','MJ':'INT'});
+    	GenOriginalData();
+    });  
+   
+    </script>
+
+  
+  
+  
+  {% endblock %}

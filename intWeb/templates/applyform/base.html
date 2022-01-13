@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Open Day</title>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel='stylesheet', href='/static/stylesheets/bootstrap.min.css'/>
+    <link rel='stylesheet', href='/static/stylesheets/bootstrap-theme.min.css'/>
+    
+    <link rel='stylesheet' href='/static/jquery-ui-dist/jquery-ui.min.css'  />
+    <script src='/static/javascripts/jquery.js' ></script>
+    <script src='/static/javascripts/bootstrap.js'></script>
+    <script src='/static/javascripts/cool/grid_export.js'></script>
+    <script src='/static/jquery-ui-dist/jquery-ui.min.js'></script>
+    
+  </head>
+  <body>
+    <div class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <div class="navbar-brand">開放日預約系統</div>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="/"><span class="glyphicon">&#xe021</span></a></li>
+          
+        </ul>
+        {# [START profile] #}
+        <p class="navbar-text navbar-right">
+        {% if session.profile %}
+          <a href="/logout">
+            {% if session.profile.image %}
+              <img class="img-circle" src="{{session.profile.image.url}}" width="24">
+            {% endif %}
+            <!-- {{session.profile.user}}  -->
+          </a>
+        {% else %}
+          <!-- a href="/login">Sign in</a  -->
+        {% endif %}
+        </p>
+        {# [END profile] #}
+      </div>
+    </div>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+    {{user}}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </body>
+
+</html>
