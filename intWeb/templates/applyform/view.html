@@ -24,14 +24,6 @@
 //$("#barcode").JsBarcode("Hi!");
 
 //<img src="/EsAsset/qrcode?data={{book.acno}}">
-function AddBlankRows(){
-  let _url="/EsAsset/{{book.id}}/item/addbatch/0?acno={{book.acno}}&regSDate={{book.regSDate}}" 
-  let number_for_rows = prompt("Please enter number for rows", "0");
-  var reg = /^\d+$/;
-  if (number_for_rows != null && reg.test(number_for_rows)) {
-    window.location.href=_url.replace("/0?",`/${number_for_rows}?`);
-  } 
-}
 </script>
 
   
@@ -48,89 +40,21 @@ function AddBlankRows(){
 <img src='{{qrcode(book.acno, error_correction="H", icon_img="images/favicon.ico",border=2,box_size=4,back_color="white", fill_color="black" )}}'>
 </div>
 
-{% if session.profile and session.profile.Role < "8" %} <div class="btn-group">
-  <a href="/EsAsset/{{book.id}}/edit" class="btn btn-primary btn-sm">
-    <i class="glyphicon glyphicon-edit"></i>
-    Edit 專案
-  </a>
-  <a href="/EsAsset/{{book.id}}/delete" class="btn btn-danger btn-sm">
-    <i class="glyphicon glyphicon-trash"></i>
-    Delete 專案
-  </a>
-  </div>
-  {% endif %}
-  <div class="media">
-    <div class="media-left">
-      {% if book.imageUrl %}
-      <img class="book-image" src="{{book.imageUrl}}">
-      {% else %}
-      {% endif %}
-    </div>
-
-  </div>
   <div class="media-body">
-    <table class="table">
-      <tr>
-        <td>id,項目代號</td>
-        <td>專案項目名稱</td>
-        <td>登記日期</td>
-        <td>createdById</td>
-      </tr>
-      <tr>
-        <td>
-          <a href="/EsAsset/{{book.id}}">{{book.id}}.{{book.acno}}</a>
-        </td>
-        <td>
-          <h4>{{book.acc}}</h4>
-        </td>
-        <td>
-          {{book.regSDate}}
-        </td>
-        <td>
-          {{book.createdById}}
-        </td>
-    </table>
-    <p>{{book.describ | safe}}</p>
+    <p>預約成功!</p>
+    <p>申請人:{{book.apply_name | safe}}</p>
+    <p>出席人數:{{book.attendance | safe}}</p>
+    <p>携帶出席人:{{book.name1 | safe}}</p>
+    <p>携帶出席人{{book.name2 | safe}}</p>
+    <p>出席時段{{book.time_period | safe}}</p>
+    
+    <div>請保留 QRCODE 截圖,作入場掃碼。 </div>
+    <img src="qrcode?data={{qrcode_txt}}">
+    <div>查詢碼</div>
+    <div>{{qrcode_txt}}</div>
   </div>
-  {% if session.profile and session.profile.Role < "8" %} <div class="btn-group">
-    <a href="/EsAsset/{{book.id}}/item/add?acno={{book.acno}}&regSDate={{book.regSDate}}" class="btn btn-primary btn-sm">
-      <i class="glyphicon glyphicon-edit"></i>
-      增加細項
-    </a>
-    <a href="#" onclick="AddBlankRows();" class="btn btn-primary btn-sm">
-      <i class="glyphicon glyphicon-edit"></i>
-      增加多項細項
-    </a>    
-    <a href="/EsAsset/{{book.id}}/itemgrid?acno={{book.acno}}&regSDate={{book.regSDate}}" class="btn btn-primary btn-sm">
-      <i class="glyphicon glyphicon-edit"></i>
-      細項表格式編輯
-    </a>
-    <a href="#" class="btn btn-success btn-sm" id="savebtn">
-      <i class="glyphicon glyphicon-edit"></i>
-      儲存運算結果
-     </a>    
-    <a href="#" class="btn btn-primary btn-sm" onclick="calcTotalbtn();">
-      <i class="glyphicon glyphicon-edit"></i>
-      淨值運算
-    </a>
-    <a href="#" class="btn btn-success btn-sm" onclick="status_place_chg();">
-      <i class="glyphicon glyphicon-edit"></i>
-      位置異動日誌儲存
-    </a>    
-    <br>
-    {% endif %}
+  
 
 
 
-
-
-<script>
-  var PostUrl='/EsAsset/{{book.id}}/item/api/JSON/update' ;    
-  $(document).ready(function(){
-    $('#savebtn').click(function(event) {
-       saveTotal(PostUrl);
-    });
-
-  });  
-</script>
 {% endblock %}

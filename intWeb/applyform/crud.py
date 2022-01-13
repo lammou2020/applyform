@@ -52,11 +52,7 @@ def upload_image_file(file,UPLOAD_FOLDER,pixStr=None):
         "Uploaded file %s as %s.", file.filename, public_url)
     return public_url
 
-
-
-
 @crud.route("/")
-@login_required_auth
 def home():
     token = request.args.get('page_token', None)
     if token:
@@ -104,7 +100,8 @@ def Get_FileList(crspath, filenames, prefix=None):
 @crud.route('/<uid>')
 def view(uid):
     book = get_applyform_model().readUid(uid)
-    return render_template("applyform/view.html", book=book)
+    qrcode_txt=book["acno"].replace("0x","")
+    return render_template("applyform/view.html", book=book,qrcode_txt=qrcode_txt)
 
 @crud.route('/<id>/captcha_text', methods=['GET', 'POST'])
 def captcha_text(id):

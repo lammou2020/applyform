@@ -23,10 +23,11 @@ def from_sql(row):
 
 # AppForm
 class AppForm(db.Model):
-    __tablename__ = 'AppForm'
+    __tablename__ = 'appform'
     id= db.Column(db.Integer,primary_key=True) # 編號
     acno = db.Column(db.String(16),unique=True,nullable=True)  #按項目/發票定義 ACC[FA2021-xxx-001/-00[1-9]
     apply_name =db.Column(db.String(80))  # 憑單編號
+    attendance=db.Column(db.Integer) 
     name1=db.Column(db.String(80))  # 憑單編號
     name2 =db.Column(db.String(80))  # 憑單編號
     tel =db.Column(db.String(80))  # 憑單編號
@@ -39,6 +40,7 @@ class AppForm(db.Model):
     def __init__(self, 
                 acno=None, 
                 apply_name=None, 
+                attendance=None,
                 name1=None, 
                 name2=None, 
                 tel=None, 
@@ -49,6 +51,7 @@ class AppForm(db.Model):
         ):
         self.acno=acno
         self.apply_name=apply_name
+        self.attendance=attendance
         self.name1=name1
         self.name2=name2
         self.tel=tel
@@ -68,10 +71,15 @@ def read(id):
     return from_sql(result)
 
 def readUid(Uid):
-    result = AppForm.query.filter_by(acno=Uid)
-    if not result:
+    query = (AppForm.query.filter_by(acno=Uid))
+    if not query:
         return None
-    return result
+    lessons = builtin_list(map(from_sql, query.all()))    
+    if len(lessons)>0:
+
+        return lessons[0]
+    else:
+        return None
 
 
 def create(data):
