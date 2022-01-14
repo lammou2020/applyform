@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import Flask
 from sqlalchemy.sql.elements import between
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 
 builtin_list = list
 
@@ -113,6 +113,13 @@ def updateAppForm_DataSet(data):
             setattr(acc, k, v)
     db.session.commit()
     return ""
+
+def count_grp():
+    order_by_total=func.sum(AppForm.attendance).label('total')
+    query = AppForm.query.with_entities(AppForm.time_period,order_by_total).group_by(AppForm.time_period)
+    if not query:
+        return None
+    return query.all()
 
 
 # [START list_asc]

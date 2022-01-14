@@ -11,21 +11,27 @@
   {% if session.profile and session.profile.Role == "1" %}
   {% endif %}
   <div>開放日，分為5個時段開放參觀。</div>
-  {% for book in ["1","2","3","4","5"] %}
+  {% for limit in limits %}
   <div class="media">
-    <a href="/applyform/{{book}}/add">
+    {% if limit > count_grp[loop.index] %}
+    <a href="/applyform/{{loop.index}}/add">
       <div class="media-left">
-        {% if book.imageUrl %}
-          <img style="max-width:100px" src="{{book.imageUrl}}">
-        {% else %}
         <img style="max-width:100px;width:100px" src="/static/images/report1.png">
-        {% endif %}
       </div>
       <div class="media-body">
-        <h4>時段 {{book | safe}}</h4>
-        <p>   x / 70 </p>
+        <h4>時段 {{loop.index | safe}}</h4>
+        <p>   {{count_grp[loop.index]}} / {{limit}} </p>
       </div>
     </a>
+    {% else %}
+    <div class="media-left">
+      <img style="max-width:100px;width:100px" src="/static/images/report1.png">
+    </div>
+    <div class="media-body">
+      <h4>時段 {{loop.index | safe}}</h4>
+      <p>   {{count_grp[loop.index]}} / {{limit}} </p>
+    </div>
+    {% endif %}
   </div>
   {% else %}
   <p>No found</p>

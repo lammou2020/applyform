@@ -11,39 +11,39 @@
 <form method="POST" enctype="multipart/form-data">
   <div class="form-group">
     <label for="apply_name">申請人:</label>
-    <input type="text" name="apply_name" id="apply_name" value="{{book.apply_name}}"  class="form-control"/>
+    <input type="text" name="apply_name" id="apply_name" value="{{book.apply_name}}"  required=true  class="form-control"/>
   </div>
   <div class="form-group">
-    <label for="attendance">人數:</label>
+    <label for="attendance">出席人數:</label>
   <select name="attendance" class="form-control">
-    <option value=1>1</option>
-    <option value=2>2</option>
-    <option value=3>3</option>
+    <option value=1 {% if book.attendance=="1" %} selected="selected"{% endif %}>1</option>
+    <option value=2 {% if book.attendance=="2" %} selected="selected"{% endif %}>2</option>
+    <option value=3 {% if book.attendance=="3" %} selected="selected"{% endif %}>3</option>
   </select>
   </div>
   <div class="form-group">
-    <label for="name1">出席子女姓名:</label>
+    <label for="name1">其他 出席人:</label>
     <input type="text" name="name1" id="name1" value="{{book.name1}}" class="form-control"/>
   </div>
   <div class="form-group">
-    <label for="name2">出席人姓名:</label>
+    <label for="name2">其他 出席人:</label>
     <input type="text" name="name2" id="name2" value="{{book.name2}}" class="form-control"/>
   </div>
 
   <div class="form-group">
-    <label for="tel">聯絡電話:</label>
-    <input type="text" name="tel" id="tel" value="{{book.tel}}" class="form-control"/>
+    <label for="tel">流動電話(澳門/內地):</label>
+    <input type="text" name="tel" id="tel" value="{{book.tel}}"  placeholder="00000000" required=true pattern="([0-9]{8})|([0-9]{11})" title="Enter 8位澳門電話/11位內地電話" class="form-control"/>
   </div>
   <div class="form-group">
     <label for="time_period">出席時段:</label>
     <input type="text" name="time_period" id="time_period" value="{{book.time_period}}"  readonly="true" class="form-control"/>
   </div>
   <div class="form-group">
-    <label for="captcha">captcha:</label>
+    <label for="captcha">驗證碼:</label>
     <table>
       <tr>
-      <td><input type="text" name="captcha" id="captcha" value=""   class="form-control"/></td>
-      <td><img src=captcha></td>
+      <td><input type="text" name="captcha" id="captcha" value=""   required=true  placeholder="000" pattern="([0-9]{3})"  class="form-control"/></td>
+      <td><img src="captcha?rnd={{rnd}}""></td>
       </tr>
     </table>
   </div>
@@ -56,7 +56,7 @@
     <label for="createdById">Created by ID</label>
     <input type="text" name="createdById" id="createdById" value="{{book.createdById}}" class="form-control"/>
   </div>
-  <div id="describ" style="color:read">{{describ}}</div>
+  <div id="describ" style="color:red">{{describ}}</div>
   <button type="submit" class="btn btn-success">提交</button>
 </form>
 
