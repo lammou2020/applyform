@@ -12,7 +12,6 @@ from datetime import datetime,date
 from flask import Response
 import json
 
-
 from flask_qrcode import QRcode
 qrcode=QRcode(current_app)
 
@@ -60,7 +59,6 @@ def upload_image_file(file,UPLOAD_FOLDER,pixStr=None):
 def home():
     red=redis.Redis()
     res=red.get(redis_grpcnt)
-    
     grpcnts=[0,0,0,0,0,0]
     if res==None:
         count_grp=get_applyform_model().count_grp()
@@ -119,7 +117,7 @@ def view(uid):
     else:
         return render_template("applyform/queryform.html")
 
-@crud.route('/<id>/captcha_text', methods=['GET', 'POST'])
+@crud.route('/<id>/captcha_text_for_testing', methods=['GET', 'POST'])
 def captcha_text(id):
     return str(session["captcha"])
 
@@ -137,6 +135,7 @@ def captcha(id):
 # [START add]
 @crud.route('/<id>/add', methods=['GET', 'POST'])
 def add(id):
+    captcha_num=random.randint(100,648)     
     rnd = int(datetime.utcnow().timestamp())
     if request.method == 'POST':
         if session.get("captcha")==None:
@@ -166,7 +165,7 @@ def add(id):
                     Error=f" {g_[1]} / {limits[g_[0]-1]}  人數太多了,請選擇其他時段!"
 
         if Error==None:
-            data['acno']=str(hex(int(datetime.utcnow().timestamp())))
+            data['acno']=str(hex(int(datetime.utcnow().timestamp())))+data["tel"][-4:]
             book = get_applyform_model().create(data)
             red=redis.Redis()
             res=json.loads(red.get(redis_grpcnt))            
@@ -175,9 +174,9 @@ def add(id):
             session["re_captcha"]=captcha
             return redirect(url_for('.view', uid=data['acno']))
         else:
-            session["captcha"]=random.randint(100,648)            
+            session["captcha"]=captcha_num          
             return render_template("applyform/form.html", action="Add", book=data, describ=Error,rnd=rnd)        
-    session["captcha"]=random.randint(100,648)
+    session["captcha"]=captcha_num
     book={
         "time_period": id,
         "regSDate":datetime.today().strftime( '%Y-%m-%d')
@@ -188,6 +187,7 @@ def add(id):
 
 
 @crud.route('/update_redis', methods=['GET', 'POST'])
+@login_required_auth
 def update_redis():
     red=redis.Redis()
     grpcnts=[0,0,0,0,0,0]
@@ -195,7 +195,6 @@ def update_redis():
     for cgp_ in count_grp:
         grpcnts[cgp_[0]]=cgp_[1]
     red.set(redis_grpcnt,json.dumps(grpcnts))
-        
     return render_template(
         "applyform/index.html",
         limits=limits,count_grp=grpcnts)
